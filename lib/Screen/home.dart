@@ -8,19 +8,19 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
- 
+
   @override
   _HomePageState createState() => _HomePageState();
 }
- 
+
 class _HomePageState extends State<HomePage> {
   late Future<List<Show>> shows;
-  
- int _selectedIndex = 0;
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Text(
       'Index 0: Home',
@@ -36,103 +36,130 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     //shows = fetchShows();
   }
- 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('DOTA 2 INFO'),
-            backgroundColor: Colors.black,),
-            backgroundColor: Colors.grey[800],     
-            body: Container(child: Padding(
-              padding: const EdgeInsets.all(50),
-              child:GridView(children: [
-                GestureDetector
-                (
-                  onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new HeroList())
+      appBar: AppBar(
+        title: const Text('DOTA 2 INFO'),
+        backgroundColor: Colors.black,
+      ),
+      backgroundColor: Colors.grey[800],
+      body: Container(
+        child: Padding(
+          padding: const EdgeInsets.all(50),
+          child: GridView(
+            children: [
+              GestureDetector(
+                onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                    builder: (BuildContext context) => new HeroList())),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.black,
                   ),
-                  child: Container (decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.black,),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                    Image.asset('Hero/logohero.png',scale: 2.5,),
-                    Padding(padding: new EdgeInsets.all(10),),
-                    Text("Heroes",style: TextStyle(color: Colors.white,fontSize: 30),)
-                  ],
-                  ),
+                      Image.asset(
+                        'Hero/logohero.png',
+                        scale: 2.5,
+                      ),
+                      Padding(
+                        padding: new EdgeInsets.all(10),
+                      ),
+                      Text(
+                        "Heroes",
+                        style: TextStyle(color: Colors.white, fontSize: 30),
+                      )
+                    ],
                   ),
                 ),
-                GestureDetector
-                (
-                  onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new DetailItem(id: 1, title: ""))
+              ),
+              GestureDetector(
+                onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        new DetailItem(id: 1, title: ""))),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.black,
                   ),
-                  child: Container (decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.black,),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                    Image.asset('Item/Logoitem.jpg',scale: 3.5,),
-                    Padding(padding: new EdgeInsets.all(10),),
-                    Text("Items",style: TextStyle(color: Colors.white,fontSize: 30),)
-                  ],
-                  ),
+                      Image.asset(
+                        'Item/Logoitem.jpg',
+                        scale: 3.5,
+                      ),
+                      Padding(
+                        padding: new EdgeInsets.all(10),
+                      ),
+                      Text(
+                        "Items",
+                        style: TextStyle(color: Colors.white, fontSize: 30),
+                      )
+                    ],
                   ),
                 ),
-                // Container (decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.black,),
-                // child: Column(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                  
-                //   Image.asset('Item/Logoitem.jpg',scale: 3.5,),
-                //   Padding(padding: new EdgeInsets.all(10),),
-                //   Text("Items",style: TextStyle(color: Colors.white,fontSize: 30),)
-                // ],
-                // ),
-                // ),
-              ],
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,crossAxisSpacing: 20),
               ),
-              ),
-              ),
+              // Container (decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.black,),
+              // child: Column(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+
+              //   Image.asset('Item/Logoitem.jpg',scale: 3.5,),
+              //   Padding(padding: new EdgeInsets.all(10),),
+              //   Text("Items",style: TextStyle(color: Colors.white,fontSize: 30),)
+              // ],
+              // ),
+              // ),
+            ],
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, crossAxisSpacing: 20),
+          ),
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.grey,
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
-        ),
-      ],
-      currentIndex: _selectedIndex,
-      selectedItemColor: Colors.indigo,
-      onTap: (int index) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProfilePage(),
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
           ),
-        );
-      },
-    ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.indigo,
+        onTap: (int index) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfilePage(),
+            ),
+          );
+        },
+      ),
     );
   }
 }
 
- 
 class Show {
   final int malId;
   final String title;
   final String imageUrl;
   final double score;
- 
+
   Show({
     required this.malId,
     required this.title,
     required this.imageUrl,
     required this.score,
   });
- 
+
   factory Show.fromJson(Map<String, dynamic> json) {
     return Show(
       malId: json['mal_id'],

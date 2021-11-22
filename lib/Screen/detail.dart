@@ -26,6 +26,8 @@ class _DetailPageState extends State<DetailPage> {
     return Scaffold(
       appBar: AppBar(title: Text('Heroes'),
           backgroundColor: Colors.lightBlue[900]),
+          backgroundColor: Colors.grey[400],
+          
       body: Center(
           child: FutureBuilder(
         builder: (context, AsyncSnapshot<DetailHero> snapshot) {

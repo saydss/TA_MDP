@@ -1,122 +1,139 @@
 // ignore_for_file: file_names
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'home.dart';
 import 'detail.dart';
 
 class HeroList extends StatefulWidget {
   const HeroList({Key? key}) : super(key: key);
- 
+
   @override
   _HeroListState createState() => _HeroListState();
 }
- 
+
 class _HeroListState extends State<HeroList> {
-  late Future<List<Show>> shows;
+  late Future<List<Hero>> heroes;
+  @override
+  void initState() {
+    super.initState();
+    heroes = fetchHeroes();
+  }
 
   @override
-Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Heroes'),
-            backgroundColor: Colors.blue[900],),
-             backgroundColor: Colors.black, 
-            body: Container(child: Padding(
-              padding: const EdgeInsets.all(50),
-              child:GridView(children: [
-                GestureDetector
-                (
-                  onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new DetailPage(id: 1, hero: ""))
-                  ),
-                  child: Container (decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.deepPurple[800],),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                    Image.asset('Hero/antimage.png',scale: 6,),
-                    Padding(padding: new EdgeInsets.all(10),),
-                    Text("ANTI MAGE",style: TextStyle(color: Colors.white,fontSize: 30),)
-                  ],
-                  ),
-                  ),
-                ),
-                GestureDetector
-                (
-                  onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new DetailPage(id: 2, hero: ""))
-                  ),
-                  child: Container (decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.deepOrangeAccent[400],),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                    Image.asset('Hero/clinkz.png',scale: 5.5,),
-                    Padding(padding: new EdgeInsets.all(10),),
-                    Text("CLINKZ",style: TextStyle(color: Colors.white,fontSize: 30),)
-                  ],
-                  ),
-                  ),
-                ),
-                GestureDetector
-                (
-                  onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new DetailPage(id: 3, hero: ""))
-                  ),
-                  child: Container (decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.amber[800],),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                    Image.asset('Hero/earthshaker.png',scale: 6,),
-                    Padding(padding: new EdgeInsets.all(10),),
-                    Text("EARTHSHAKER",style: TextStyle(color: Colors.white,fontSize: 30),)
-                  ],
-                  ),
-                  ),
-                ),
-                GestureDetector
-                (
-                  onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new DetailPage(id: 4, hero: ""))
-                  ),
-                  child: Container (decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.grey[800],),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                    Image.asset('Hero/faceless_void.png',scale: 6,),
-                    Padding(padding: new EdgeInsets.all(10),),
-                    Text("FACELESS VOID",style: TextStyle(color: Colors.white,fontSize: 30),)
-                  ],
-                  ),
-                  ),
-                ),
-                GestureDetector
-                (
-                  onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new DetailPage(id: 5, hero: ""))
-                  ),
-                  child: Container (decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.orange[900],),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                    Image.asset('Hero/juggernaut.png',scale: 5,),
-                    Padding(padding: new EdgeInsets.all(10),),
-                    Text("JUGGERNAUT",style: TextStyle(color: Colors.white,fontSize: 30),)
-                  ],
-                  ),
+      appBar: AppBar(
+        title: const Text('Heroes'),
+        backgroundColor: Colors.blue[900],
+      ),
+      backgroundColor: Colors.black,
+      body: Center(
+        child: FutureBuilder(
+          builder: (context, AsyncSnapshot<List<Hero>> snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                physics: BouncingScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: snapshot.data!.length,
+                itemBuilder: (BuildContext context, int index) =>
+                    GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailPage(
+                          id: snapshot.data![index].id,
+                          hero: snapshot.data![index].hero,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    height: 300,
+                    width: 100,
+                    decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                                topRight: Radius.circular(12),
+                              ),
+                              child: Image.network(
+                                  snapshot.data![index].Gambarhero,
+                                  scale: 6),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                snapshot.data![index].hero,
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    letterSpacing: 0.2),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                GestureDetector
-                (
-                  onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new DetailPage(id: 6, hero: ""))
-                  ),
-                  child: Container (decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.blueGrey[700]),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                    Image.asset('Hero/terrorblade.png',scale: 5,),
-                    Padding(padding: new EdgeInsets.all(10),),
-                    Text("TERRORBLADE",style: TextStyle(color: Colors.white,fontSize: 30),)
-                  ],
-                  ),
-                  ),
-                ),
-              ],
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,crossAxisSpacing: 20, mainAxisSpacing: 20),
-              ),
-              ),
-              ),
               );
+            } else if (snapshot.hasError) {
+              return const Center(child: Text('Something went wrong :('));
+            }
+            return const CircularProgressIndicator();
+          },
+          future: heroes,
+        ),
+      ),
+    );
+  }
+}
+
+class Hero {
+  final int id;
+  final String hero;
+  final String Gambarhero;
+  Hero({
+    required this.id,
+    required this.hero,
+    required this.Gambarhero,
+  });
+
+  factory Hero.fromJson(Map<String, dynamic> json) {
+    return Hero(
+        id: json['id'], hero: json['hero'], Gambarhero: json['Gambarhero']);
+  }
+}
+
+Future<List<Hero>> fetchHeroes() async {
+  final response = await http.get(
+      Uri.parse('https://my-json-server.typicode.com/saydss/Apidota2/dota'));
+
+  if (response.statusCode == 200) {
+    var topShowsJson = jsonDecode(response.body) as List;
+    return topShowsJson.map((hero) => Hero.fromJson(hero)).toList();
+  } else {
+    throw Exception('Failed to load shows');
   }
 }
